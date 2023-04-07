@@ -34,10 +34,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
    return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        centerTitle: true,
+        title: const Text('Home Page'),
       ),
       body: Center(
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+          ),
           child: const Text('Go to Counter Page'),
           onPressed: () {
             Navigator.of(context).push(
@@ -79,6 +83,7 @@ class CounterPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+          centerTitle: true,
           title: const Text('Counter'),
           actions: [
           IconButton(onPressed: (){
