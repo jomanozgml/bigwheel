@@ -38,19 +38,34 @@ class HomePage extends StatelessWidget {
         title: const Text('Home Page'),
       ),
       body: Center(
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-          ),
-          child: const Text('Go to Counter Page'),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const CounterPage(),
+        child: Column(
+          children: [
+            const SizedBox(height: 25),
+            const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
+            Container(
+              width: 400,
+              height: 400,
+              decoration: const BoxDecoration(
+                color: Colors.teal,
+                shape: BoxShape.circle, 
+                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],         
               ),
-            );
-          },
-        ),
+            ),
+            const SizedBox(height: 25),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+              ),
+              child: const Text('Go to Counter Page'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CounterPage(),
+                  ),
+                );
+              },
+          ),
+        ]),
       ),
     );
   }
