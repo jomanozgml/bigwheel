@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "810739053255",
+    "project_id": "myth-1990",
+    "storage_bucket": "myth-1990.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810739053255:android:b9cc835055470c1bbc84e2",
+        "android_client_info": {
+          "package_name": "com.example.bigwheel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810739053255-ke3d2vu950r5fguc183rpt5dkp420tu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcjZTw6qZVmJXlixQ1fBK5QYA-qzKFaF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810739053255-ke3d2vu950r5fguc183rpt5dkp420tu8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "810739053255-6vtko3ui3ohapdooicssitqn69ss1l0l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bigwheel"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
