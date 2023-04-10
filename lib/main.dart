@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 final counterProvider = StateProvider.autoDispose((ref) => 0);
+final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
 
 void main() async{
   await Firebase.initializeApp(
@@ -27,12 +28,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-   return Scaffold(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final double rotationAngle = ref.watch(rotationAngleProvider);
+
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Home Page'),
@@ -42,15 +45,38 @@ class HomePage extends StatelessWidget {
           children: [
             const SizedBox(height: 25),
             const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
-            Container(
-              width: 400,
-              height: 400,
-              decoration: const BoxDecoration(
-                color: Colors.teal,
-                shape: BoxShape.circle, 
-                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],         
+            GestureDetector(
+              onPanUpdate: (details) => 
+                ref.read(rotationAngleProvider.notifier).state += details.delta.dx,
+              child: Transform.rotate(
+                angle: rotationAngle,
+                child: Container(
+                  width: 400,
+                  height: 400,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],
+                    image: DecorationImage(
+                      image: NetworkImage('assets/images/bigWheel.png'),
+                      fit: BoxFit.cover,
+                    ),         
+                  ),
+                ),
               ),
             ),
+            // Container(
+            //   width: 600,
+            //   height: 600,
+            //   decoration: const BoxDecoration(
+            //     // color: Colors.teal,
+            //     shape: BoxShape.circle,
+            //     boxShadow: [BoxShadow(color: Colors.black, blurRadius: 15)],
+            //     image: DecorationImage(
+            //       image: NetworkImage('assets/images/bigWheel.jpg'),
+            //       fit: BoxFit.cover,
+            //     ),         
+            //   ),
+            // ),
             const SizedBox(height: 25),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
