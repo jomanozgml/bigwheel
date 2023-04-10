@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:math';
 
 final counterProvider = StateProvider.autoDispose((ref) => 0);
 final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
+final storageRef = FirebaseStorage.instance.ref();
+final imageRef = storageRef.child('assets/images/bigWheel.png');
 
 void main() async{
   await Firebase.initializeApp(
@@ -36,6 +40,7 @@ class HomePage extends ConsumerWidget {
     final double rotationAngle = ref.watch(rotationAngleProvider);
 
     return Scaffold(
+      backgroundColor: Color.lerp(Colors.teal, Colors.white, 0.9),
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Home Page'),
@@ -46,22 +51,32 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 25),
             const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
             GestureDetector(
-              onPanUpdate: (details) => 
-                ref.read(rotationAngleProvider.notifier).state += details.delta.dx,
+              onPanUpdate: (details) =>
+                ref.read(rotationAngleProvider.notifier).state += details.delta.dy,
+                // double dx = details.delta.dx;
+                // double dy = details.delta.dy;
+                // double angle = atan2(dy, dx);
+                // angle = angle * 180 / pi;
+              // },
               child: Transform.rotate(
-                angle: rotationAngle,
-                child: Container(
+                angle: rotationAngle * pi / 180,
+                child: Image.network(
+                  imageRef.fullPath,
                   width: 400,
                   height: 400,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],
-                    image: DecorationImage(
-                      image: NetworkImage('assets/images/bigWheel.png'),
-                      fit: BoxFit.cover,
-                    ),         
-                  ),
-                ),
+                )
+                // child: Container(
+                //   width: 400,
+                //   height: 400,
+                //   decoration: const BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],
+                //     image: DecorationImage(
+                //       image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/myth-1990.appspot.com/o/assets%2Fimages%2FbigWheel.png?alt=media'),
+                //       fit: BoxFit.cover,
+                //     ),         
+                //   ),
+                // ),
               ),
             ),
             // Container(
