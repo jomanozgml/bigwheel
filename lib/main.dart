@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:math';
 
 final counterProvider = StateProvider.autoDispose((ref) => 0);
 final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
-final storageRef = FirebaseStorage.instance.ref();
-final imageRef = storageRef.child('assets/images/bigWheel.png');
+// final storageRef = FirebaseStorage.instance.ref();
+// final imageRef = storageRef.child('assets/images/bigWheel.png');
 
 void main() async{
   await Firebase.initializeApp(
@@ -60,10 +60,17 @@ class HomePage extends ConsumerWidget {
               // },
               child: Transform.rotate(
                 angle: rotationAngle * pi / 180,
-                child: Image.network(
-                  imageRef.fullPath,
-                  width: 400,
-                  height: 400,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
+                  ),
+                  child: Image.network(
+                    // imageRef.fullPath,
+                    'assets/images/bigWheel.png',
+                    width: 400,
+                    height: 400,
+                  ),
                 )
                 // child: Container(
                 //   width: 400,
