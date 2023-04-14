@@ -1,5 +1,24 @@
 {
   "projects": {
-    "default": "myth-1990"
-  }
+    "default": "spinbigwheel",
+    "dev": "spinbigwheel",
+    "prod": "myth-1990"
+  },
+  "targets": {
+    "spinbigwheel": {
+      "hosting": {
+        "dev": [
+          "spinbigwheel"
+        ]
+      }
+    },
+    "myth-1990": {
+      "hosting": {
+        "prod": [
+          "myth-1990"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

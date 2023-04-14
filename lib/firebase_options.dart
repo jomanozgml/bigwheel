@@ -2,7 +2,7 @@
 // ignore_for_file: lines_longer_than_80_chars, avoid_classes_with_only_static_members
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -14,10 +14,25 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
+
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
+      switch (flavor) {
+        case 'dev':
+          return dev;
+        case 'prod':
+          return prod;
+        default:
+          throw UnsupportedError(
+            'DefaultFirebaseOptions have not been configured for $flavor - '
+            'you can reconfigure this by running the FlutterFire CLI again.',
+          );
+      }
+      
+      // return kDebugMode ? dev : prod;
+       // return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -43,7 +58,17 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
+  static const FirebaseOptions dev = FirebaseOptions(
+    apiKey: 'AIzaSyCdUPxoyPtL-K9ch2Risg8ZuPK3zbMROTY',
+    authDomain: 'spinbigwheel.firebaseapp.com',
+    projectId: 'spinbigwheel',
+    storageBucket: 'spinbigwheel.appspot.com',
+    messagingSenderId: '829353386148',
+    appId: '1:829353386148:web:fd92e9b5beafb66b188631',
+    measurementId: 'G-FJ1V586DW4',
+  );
+
+  static const FirebaseOptions prod = FirebaseOptions(
     apiKey: 'AIzaSyD0teDUXFpudk8UblUDUsPGOLzH_gIo2Pw',
     appId: '1:810739053255:web:00626219e20da247bc84e2',
     messagingSenderId: '810739053255',

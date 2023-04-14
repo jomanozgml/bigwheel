@@ -10,6 +10,13 @@ final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
 // final storageRef = FirebaseStorage.instance.ref();
 // final imageRef = storageRef.child('assets/images/bigWheel.png');
 
+/// To run the program in dev environment type
+/// flutter run -d chrome --dart-define=FLAVOR=dev
+/// flutter build web --dart-define=FLAVOR=dev
+/// firebase deploy -P dev --only hosting:dev
+
+// fireabase deploy -P site-one --only hosting:app-id-one
+
 void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -23,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Counter App',
+      title: 'Big Wheel',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
@@ -65,9 +72,9 @@ class HomePage extends ConsumerWidget {
                     shape: BoxShape.circle,
                     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
                   ),
-                  child: Image.network(
+                  child: Image.asset(
                     // imageRef.fullPath,
-                    'assets/images/bigWheel.png',
+                    'images/bigWheel.png',
                     width: 400,
                     height: 400,
                   ),
@@ -86,33 +93,33 @@ class HomePage extends ConsumerWidget {
                 // ),
               ),
             ),
-            // Container(
-            //   width: 600,
-            //   height: 600,
-            //   decoration: const BoxDecoration(
-            //     // color: Colors.teal,
-            //     shape: BoxShape.circle,
-            //     boxShadow: [BoxShadow(color: Colors.black, blurRadius: 15)],
-            //     image: DecorationImage(
-            //       image: NetworkImage('assets/images/bigWheel.jpg'),
-            //       fit: BoxFit.cover,
-            //     ),         
-            //   ),
-            // ),
             const SizedBox(height: 25),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-              ),
-              child: const Text('Go to Counter Page'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CounterPage(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
                   ),
-                );
-              },
-          ),
+                  child: const Text('Spin the BigWheel'),
+                  onPressed: () {},
+                ),
+                const SizedBox(width: 25),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+                  ),
+                  child: const Text('Go to Counter Page'),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CounterPage(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
         ]),
       ),
     );
