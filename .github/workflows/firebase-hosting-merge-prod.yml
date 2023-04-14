@@ -19,7 +19,6 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MYTH_1990 }}'
           channelId: live
           projectId: myth-1990
-          # target: prod
 
 
 # firebase-hosting-pull-request.yml contents
