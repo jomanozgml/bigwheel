@@ -64,26 +64,40 @@ class HomePage extends ConsumerWidget {
                 double dx = details.delta.dx - 200;
                 double dy = details.delta.dy - 200;
                 double angle = atan2(dy, dx);
-                ref.read(rotationAngleProvider.notifier).state -= angle;
+                double rotationDirection = angle > 0 ? 1 : -1;
+                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection;
               },
               child: Transform.rotate(
                 angle: rotationAngle * pi / 180,
                 child: Container(
+                  padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
                   ),
-                  child: Image.asset(
+                  child: const Image(image: AssetImage("images/bigWheel.png")),
                     // imageRef.fullPath,
-                    "images/bigWheel.png",
-                    width: 400,
-                    height: 400,
-                  ),
+                    // "images/bigWheel.png",
+                    // width: 400,
+                    // height: 400,
+                  // ),
                 )
               ),
             ),
 
-            Text(((rotationAngle - oldAngle)/6.667).toStringAsFixed(0)),
+            const SizedBox(height: 25),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Position: '),
+                Text((rotationAngle/6.667 % 54).toStringAsFixed(0)),
+                const SizedBox(width: 25),
+                const Text('Difference: '),
+                Text(((rotationAngle - oldAngle)/6.667).toStringAsFixed(0)),
+              ],
+            ),
+
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +106,7 @@ class HomePage extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
                   ),
-                  child: const Text('Reset the Rotation'),
+                  child: const Text('Add the Graph'),
                   onPressed: () {
                     ref.read(oldAngleProvider.notifier).state = rotationAngle;
                   },
