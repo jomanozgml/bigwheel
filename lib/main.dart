@@ -7,6 +7,8 @@ import 'dart:math';
 
 final counterProvider = StateProvider.autoDispose((ref) => 0);
 final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
+final oldAngleProvider = StateProvider.autoDispose((ref) => 0.0);
+
 // final storageRef = FirebaseStorage.instance.ref();
 // final imageRef = storageRef.child('assets/images/bigWheel.png');
 
@@ -14,7 +16,6 @@ final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
 /// flutter run -d chrome --dart-define=FLAVOR=dev
 /// flutter build web --dart-define=FLAVOR=dev
 /// firebase deploy -P dev --only hosting:dev
-
 // fireabase deploy -P site-one --only hosting:app-id-one
 
 void main() async{
@@ -41,10 +42,11 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double rotationAngle = ref.watch(rotationAngleProvider);
+    final double oldAngle = ref.watch(oldAngleProvider);
 
     return Scaffold(
       backgroundColor: Color.lerp(Colors.teal, Colors.white, 0.9),
@@ -58,13 +60,12 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 25),
             const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
             GestureDetector(
-              onPanUpdate: (details) =>
-                ref.read(rotationAngleProvider.notifier).state += details.delta.dy,
-                // double dx = details.delta.dx;
-                // double dy = details.delta.dy;
-                // double angle = atan2(dy, dx);
-                // angle = angle * 180 / pi;
-              // },
+              onPanUpdate: (details) {
+                double dx = details.delta.dx - 200;
+                double dy = details.delta.dy - 200;
+                double angle = atan2(dy, dx);
+                ref.read(rotationAngleProvider.notifier).state -= angle;
+              },
               child: Transform.rotate(
                 angle: rotationAngle * pi / 180,
                 child: Container(
@@ -74,25 +75,15 @@ class HomePage extends ConsumerWidget {
                   ),
                   child: Image.asset(
                     // imageRef.fullPath,
-                    'images/bigWheel.png',
+                    "images/bigWheel.png",
                     width: 400,
                     height: 400,
                   ),
                 )
-                // child: Container(
-                //   width: 400,
-                //   height: 400,
-                //   decoration: const BoxDecoration(
-                //     shape: BoxShape.circle,
-                //     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],
-                //     image: DecorationImage(
-                //       image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/myth-1990.appspot.com/o/assets%2Fimages%2FbigWheel.png?alt=media'),
-                //       fit: BoxFit.cover,
-                //     ),         
-                //   ),
-                // ),
               ),
             ),
+
+            Text(((rotationAngle - oldAngle)/6.667).toStringAsFixed(0)),
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -101,8 +92,10 @@ class HomePage extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
                   ),
-                  child: const Text('Spin the BigWheel'),
-                  onPressed: () {},
+                  child: const Text('Reset the Rotation'),
+                  onPressed: () {
+                    ref.read(oldAngleProvider.notifier).state = rotationAngle;
+                  },
                 ),
                 const SizedBox(width: 25),
                 ElevatedButton(
