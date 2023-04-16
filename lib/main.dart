@@ -58,13 +58,13 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 25),
             const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
             GestureDetector(
-              onPanUpdate: (details) =>
-                ref.read(rotationAngleProvider.notifier).state += details.delta.dy,
-                // double dx = details.delta.dx;
-                // double dy = details.delta.dy;
-                // double angle = atan2(dy, dx);
-                // angle = angle * 180 / pi;
-              // },
+              onPanUpdate: (details){
+                // ref.read(rotationAngleProvider.notifier).state += details.delta.dy,
+                double dx = details.delta.dx - 200;
+                double dy = details.delta.dy - 200;
+                double angle = atan2(dy, dx);
+                ref.read(rotationAngleProvider.notifier).state -= angle;
+              },
               child: Transform.rotate(
                 angle: rotationAngle * pi / 180,
                 child: Container(
@@ -93,6 +93,14 @@ class HomePage extends ConsumerWidget {
                 // ),
               ),
             ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Position: '),
+                Text((rotationAngle/6.667 % 54).toStringAsFixed(0)),
+              ],
+            ),
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +109,7 @@ class HomePage extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
                   ),
-                  child: const Text('Spin the BigWheel'),
+                  child: const Text('Add to the Graph'),
                   onPressed: () {},
                 ),
                 const SizedBox(width: 25),
