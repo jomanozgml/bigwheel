@@ -75,12 +75,12 @@ class HomePage extends ConsumerWidget {
                     shape: BoxShape.circle,
                     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
                   ),
-                  child: const Image(image: AssetImage("images/bigWheel.png")),
+                  child: Image.asset(
                     // imageRef.fullPath,
-                    // "images/bigWheel.png",
-                    // width: 400,
-                    // height: 400,
-                  // ),
+                    "images/bigWheel.png",
+                    width: 400,
+                    height: 400,
+                  ),
                 )
               ),
             ),
@@ -106,7 +106,7 @@ class HomePage extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
                   ),
-                  child: const Text('Add the Graph'),
+                  child: const Text('Add to the Graph'),
                   onPressed: () {
                     ref.read(oldAngleProvider.notifier).state = rotationAngle;
                   },
