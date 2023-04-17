@@ -3,13 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'chart.dart';
 import 'counter.dart';
 import 'dart:math';
-// import 'package:firebase_storage/firebase_storage.dart';
-
-// final storageRef = FirebaseStorage.instance.ref();
-// final imageRef = storageRef.child('assets/images/bigWheel.png');
 
 final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
 final oldAngleProvider = StateProvider.autoDispose((ref) => 0.0);
+final columnCountProvider = StateProvider.autoDispose((ref) => 0);
+// final colorProvider = StateProvider.autoDispose((ref) => Colors.teal);
 double position = 0.0;
 double difference = 0.0;
 
@@ -25,7 +23,8 @@ class HomePage extends ConsumerWidget {
       backgroundColor: Color.lerp(Colors.teal, Colors.white, 0.9),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Home Page'),
+        title: const Text('BIG WHEEL', style: TextStyle(color: Colors.white, fontSize: 14)),
+        toolbarHeight: 20,
       ),
       body: Center(
         child: Column(
@@ -38,7 +37,7 @@ class HomePage extends ConsumerWidget {
                 double angle = atan2(dy, dx);
                 double rotationDirection = 1.0;
                 // if (dx > 0 || dy < 0) { rotationDirection = -1.0; }
-                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection;
+                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection *0.5;
                 position = (rotationAngle/6.667 % 54);
                 difference = ((rotationAngle - oldAngle)/6.667);
               },
@@ -51,10 +50,9 @@ class HomePage extends ConsumerWidget {
                     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
                   ),
                   child: Image.asset(
-                    // imageRef.fullPath,
                     "assets/images/bigWheel.png",
-                    width: 250,
-                    height: 250,
+                    width: 300,
+                    height: 300,
                   ),
                 )
               ),
@@ -64,7 +62,7 @@ class HomePage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Position: '),
-                Text(position.toStringAsFixed(0)),
+                Text(position.ceil().toString()),
                 const SizedBox(width: 25),
                 const Text('Difference: '),
                 Text(((rotationAngle - oldAngle)/6.667).toStringAsFixed(0)),
@@ -82,7 +80,8 @@ class HomePage extends ConsumerWidget {
                   child: const Text('Add to the Graph'),
                   onPressed: () {
                     ref.read(oldAngleProvider.notifier).state = rotationAngle;
-
+                    ref.read(columnCountProvider.notifier).state++;
+                    // ref.read(colorProvider.notifier).state = Colors.grey;
                   },
                 ),
                 const SizedBox(width: 15),
@@ -102,7 +101,7 @@ class HomePage extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 15),
-            ChartPage(position.toInt()),
+            ChartPage(position.ceil()),
         ]),
       ),
     );
