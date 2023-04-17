@@ -53,82 +53,85 @@ class HomePage extends ConsumerWidget {
         title: const Text('Home Page'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 25),
-            const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
-            GestureDetector(
-              onPanUpdate: (details){
-                // ref.read(rotationAngleProvider.notifier).state += details.delta.dy,
-                double dx = details.delta.dx - 200;
-                double dy = details.delta.dy - 200;
-                double angle = atan2(dy, dx);
-                ref.read(rotationAngleProvider.notifier).state -= angle;
-              },
-              child: Transform.rotate(
-                angle: rotationAngle * pi / 180,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
-                  ),
-                  child: Image.asset(
-                    // imageRef.fullPath,
-                    'images/bigWheel.png',
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 25),
+              const Icon(Icons.arrow_downward_sharp, size: 50, color: Colors.teal),
+              GestureDetector(
+                onPanUpdate: (details){
+                  // ref.read(rotationAngleProvider.notifier).state += details.delta.dy,
+                  double dx = details.delta.dx - 200;
+                  double dy = details.delta.dy - 200;
+                  double angle = atan2(dy, dx);
+                  ref.read(rotationAngleProvider.notifier).state -= angle;
+                },
+                child: Transform.rotate(
+                  angle: rotationAngle * pi / 180,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
                     width: 400,
                     height: 400,
-                  ),
-                )
-                // child: Container(
-                //   width: 400,
-                //   height: 400,
-                //   decoration: const BoxDecoration(
-                //     shape: BoxShape.circle,
-                //     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],
-                //     image: DecorationImage(
-                //       image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/myth-1990.appspot.com/o/assets%2Fimages%2FbigWheel.png?alt=media'),
-                //       fit: BoxFit.cover,
-                //     ),         
-                //   ),
-                // ),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
+                    ),
+                    child: Image.asset(
+                      // imageRef.fullPath,
+                      'assets/images/bigWheel.png',
+                    ),
+                  )
+                  // child: Container(
+                  //   width: 400,` 
+                  //   height: 400,
+                  //   decoration: const BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 10)],
+                  //     image: DecorationImage(
+                  //       image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/myth-1990.appspot.com/o/assets%2Fimages%2FbigWheel.png?alt=media'),
+                  //       fit: BoxFit.cover,
+                  //     ),         
+                  //   ),
+                  // ),
+                ),
               ),
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Position: '),
-                Text((rotationAngle/6.667 % 54).toStringAsFixed(0)),
-              ],
-            ),
-            const SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Position: '),
+                  Text((rotationAngle/6.667 % 54).toStringAsFixed(0)),
+                ],
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+                    ),
+                    child: const Text('Add to the Graph'),
+                    onPressed: () {},
                   ),
-                  child: const Text('Add to the Graph'),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 25),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+                  const SizedBox(width: 25),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+                    ),
+                    child: const Text('Go to Counter Page'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const CounterPage(),
+                        ),
+                      );
+                    },
                   ),
-                  child: const Text('Go to Counter Page'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const CounterPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-        ]),
+                ],
+              ),
+          ]),
+        ),
       ),
     );
   }
