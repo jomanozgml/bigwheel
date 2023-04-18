@@ -77,7 +77,7 @@ class ChartPage extends ConsumerWidget {
                         height: positions[index] * 4,
                         // color: color,
                         color: Colors.grey,
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
                       ),
                     ],
                   ),
