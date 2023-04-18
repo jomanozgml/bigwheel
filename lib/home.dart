@@ -33,7 +33,7 @@ class HomePage extends ConsumerWidget {
             ChartPage(position.round(), difference.round()),
             const SizedBox(height: 15),
             SizedBox(
-              width: double.infinity,
+              width: 400,
               child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -74,7 +74,7 @@ class HomePage extends ConsumerWidget {
                 )
               ),
             ),
-
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
