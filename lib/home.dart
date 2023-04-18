@@ -29,7 +29,24 @@ class HomePage extends ConsumerWidget {
       body: Center(
         child: Column(
           children: [
-            const Icon(Icons.arrow_downward_sharp, size: 30, color: Colors.teal),
+            const SizedBox(height: 15),
+            ChartPage(position.round(), difference.round()),
+            const SizedBox(height: 15),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    ),
+                    child: const Text('Add to the Graph'),
+                    onPressed: () {
+                      ref.read(oldAngleProvider.notifier).state = rotationAngle;
+                      ref.read(columnCountProvider.notifier).state++;
+                      // ref.read(colorProvider.notifier).state = Colors.grey;
+                    },
+                  ),
+            ),
+            const Icon(Icons.arrow_downward_sharp, size: 30, color: Colors.black),
             GestureDetector(
               onPanUpdate: (details) {
                 double dx = details.delta.dx ;
@@ -37,7 +54,7 @@ class HomePage extends ConsumerWidget {
                 double angle = atan2(dy, dx);
                 double rotationDirection = 1.0;
                 // if (dx > 0 || dy < 0) { rotationDirection = -1.0; }
-                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection *0.5;
+                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection *0.333;
                 position = (rotationAngle/6.667 % 54);
                 difference = ((rotationAngle - oldAngle)/6.667);
               },
@@ -51,8 +68,8 @@ class HomePage extends ConsumerWidget {
                   ),
                   child: Image.asset(
                     "assets/images/bigWheel.png",
-                    width: 300,
-                    height: 300,
+                    width: 360,
+                    height: 360,
                   ),
                 )
               ),
@@ -62,46 +79,45 @@ class HomePage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Position: '),
-                Text(position.ceil().toString()),
+                Text((position.round() == 54 ? 0: position.round()).toString()),
                 const SizedBox(width: 25),
                 const Text('Difference: '),
-                Text(((rotationAngle - oldAngle)/6.667).toStringAsFixed(0)),
+                Text(((rotationAngle-oldAngle)/6.667).round().toString()),
               ],
             ),
 
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  ),
-                  child: const Text('Add to the Graph'),
-                  onPressed: () {
-                    ref.read(oldAngleProvider.notifier).state = rotationAngle;
-                    ref.read(columnCountProvider.notifier).state++;
-                    // ref.read(colorProvider.notifier).state = Colors.grey;
-                  },
-                ),
-                const SizedBox(width: 15),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  ),
-                  child: const Text('Go to Counter Page'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const CounterPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
-            ChartPage(position.ceil()),
+            // const SizedBox(height: 15),
+
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            //       ),
+            //       child: const Text('Add to the Graph'),
+            //       onPressed: () {
+            //         ref.read(oldAngleProvider.notifier).state = rotationAngle;
+            //         ref.read(columnCountProvider.notifier).state++;
+            //         // ref.read(colorProvider.notifier).state = Colors.grey;
+            //       },
+            //     ),
+            //     const SizedBox(width: 15),
+            //     ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            //       ),
+            //       child: const Text('Go to Counter Page'),
+            //       onPressed: () {
+            //         Navigator.of(context).push(
+            //           MaterialPageRoute(
+            //             builder: (context) => const CounterPage(),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ],
+            // ),
         ]),
       ),
     );
