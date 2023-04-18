@@ -54,7 +54,7 @@ class HomePage extends ConsumerWidget {
                 double angle = atan2(dy, dx);
                 double rotationDirection = 1.0;
                 // if (dx > 0 || dy < 0) { rotationDirection = -1.0; }
-                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection *0.5;
+                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection *0.333;
                 position = (rotationAngle/6.667 % 54);
                 difference = ((rotationAngle - oldAngle)/6.667);
               },
