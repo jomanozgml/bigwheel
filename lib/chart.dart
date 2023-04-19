@@ -25,16 +25,16 @@ class ChartPage extends ConsumerWidget {
     return Column(
       children: [
         Container(
-          width: 400,
+          width: double.infinity,
           height: 25,
-          color: Colors.white,
+          color: Colors.white12,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 columnCount,
                 (index) => Row(
                   children: [
-                    Text(differences[index].toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(differences[index].toString(), style: textStyle),
                     const Text(', '),
                   ],
                 ),
@@ -48,7 +48,7 @@ class ChartPage extends ConsumerWidget {
           decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: Colors.black,
+                color: Colors.white,
                 width: 5,
               ),
             ),
@@ -61,22 +61,23 @@ class ChartPage extends ConsumerWidget {
                 height: 216,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [Text('54'), Text('41'), Text('27'), Text('14'), Text('0')],
+                  children: const [Text('54', style: textStyle), Text('41', style: textStyle,),
+                    Text('27', style:textStyle), Text('14', style: textStyle), Text('0', style: textStyle)],
                 ),
               ),
-              const VerticalDivider( width: 10, thickness: 5, color: Colors.black),
+              const VerticalDivider( width: 10, thickness: 5, color: Colors.white),
               Row(
                 children: List.generate(
                   columnCount,
                   (index) => Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(positions[index].toString()),
+                      Text(positions[index].toString(), style: textStyle),
                       Container(
                         width: 10,
                         height: positions[index] * 4,
                         // color: color,
-                        color: Colors.grey,
+                        color: Colors.lightBlueAccent,
                         margin: const EdgeInsets.symmetric(horizontal: 2),
                       ),
                     ],
