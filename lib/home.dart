@@ -7,7 +7,6 @@ import 'dart:math';
 final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
 final oldAngleProvider = StateProvider.autoDispose((ref) => 0.0);
 final columnCountProvider = StateProvider.autoDispose((ref) => 0);
-// final colorProvider = StateProvider.autoDispose((ref) => Colors.teal);
 double position = 0.0;
 double difference = 0.0;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
@@ -33,31 +32,15 @@ class HomePage extends ConsumerWidget {
         child: Column(
           children: [
             const SizedBox(height: 15),
-            ChartPage(position.round(), difference.round()),
+            ChartPage(position.round() == 54 ? 0: position.round(), difference.round()),
             const SizedBox(height: 15),
-            SizedBox(
-              width: 400,
-              child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    ),
-                    child: const Text('Add to the Graph', style: TextStyle(color: Colors.black)),
-                    onPressed: () {
-                      ref.read(oldAngleProvider.notifier).state = rotationAngle;
-                      ref.read(columnCountProvider.notifier).state++;
-                      // ref.read(colorProvider.notifier).state = Colors.grey;
-                    },
-                  ),
-            ),
             const Icon(Icons.arrow_downward_sharp, size: 30, color: Colors.white),
             GestureDetector(
               onPanUpdate: (details) {
                 double dx = details.delta.dx ;
                 double dy = details.delta.dy ;
                 double angle = atan2(dy, dx);
-                double rotationDirection = 1.0;
-                // if (dx > 0 || dy < 0) { rotationDirection = -1.0; }
-                ref.read(rotationAngleProvider.notifier).state += angle * rotationDirection *0.333;
+                ref.read(rotationAngleProvider.notifier).state += angle *0.333;
                 position = (rotationAngle/6.667 % 54);
                 difference = ((rotationAngle - oldAngle)/6.667);
               },
@@ -87,6 +70,32 @@ class HomePage extends ConsumerWidget {
                 const Text('Difference: ', style: textStyle),
                 Text(((rotationAngle-oldAngle)/6.667).round().toString(), style: textStyle),
               ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 400,
+              child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    ),
+                    child: const Text('Add to the Graph', style: TextStyle(color: Colors.black)),
+                    onPressed: () {
+                      ref.read(oldAngleProvider.notifier).state = rotationAngle;
+                      ref.read(columnCountProvider.notifier).state++;
+                    },
+                  ),
+            ),
+            const SizedBox(height: 10),
+            Slider(
+              value: rotationAngle,
+              min: -360,
+              max: 360,
+              divisions: 360,
+              onChanged: (value) {
+                ref.read(rotationAngleProvider.notifier).state = value;
+                position = (rotationAngle/6.667 % 54);
+                difference = ((rotationAngle - oldAngle)/6.667);
+              },
             ),
 
             // const SizedBox(height: 15),

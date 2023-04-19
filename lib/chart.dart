@@ -35,7 +35,7 @@ class ChartPage extends ConsumerWidget {
                 (index) => Row(
                   children: [
                     Text(differences[index].toString(), style: textStyle),
-                    const Text(', '),
+                    const Text(', ', style: textStyle),
                   ],
                 ),
               ),
@@ -43,8 +43,9 @@ class ChartPage extends ConsumerWidget {
         ),
         const SizedBox(height: 5),
         Container(
-          width: 400,
+          width: double.infinity,
           height: 238,
+          margin: const EdgeInsets.symmetric(horizontal: 15),
           decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(
