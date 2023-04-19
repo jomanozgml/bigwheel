@@ -20,7 +20,6 @@ class HomePage extends ConsumerWidget {
     final double oldAngle = ref.watch(oldAngleProvider);
 
     return Scaffold(
-      // backgroundColor: Color.lerp(Colors.teal, Colors.white, 0.9),
       backgroundColor: Colors.black87,
       appBar: AppBar(
         centerTitle: true,
@@ -87,10 +86,11 @@ class HomePage extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             Slider(
-              value: rotationAngle,
-              min: -360,
+              value: rotationAngle < 0 ? 360 + rotationAngle : rotationAngle > 360 ? rotationAngle - 360 : rotationAngle,
+              min: 0,
               max: 360,
               divisions: 360,
+
               onChanged: (value) {
                 ref.read(rotationAngleProvider.notifier).state = value;
                 position = (rotationAngle/6.667 % 54);
