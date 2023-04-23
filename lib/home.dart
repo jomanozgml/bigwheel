@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'chart.dart';
-// import 'counter.dart';
+import 'counter.dart';
 import 'dart:math';
 
 final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
@@ -25,7 +25,13 @@ class HomePage extends ConsumerWidget {
         centerTitle: true,
         title: const Text('BIG WHEEL',
           style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
-        toolbarHeight: 20,
+        toolbarHeight: 22,
+        actions: <Widget>[
+          IconButton(onPressed: () { Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const CounterPage()));
+                    },
+                    icon: const Icon(Icons.double_arrow_outlined, size: 12)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -100,39 +106,6 @@ class HomePage extends ConsumerWidget {
                   },
                 ),
               ),
-
-              // const SizedBox(height: 15),
-
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     ElevatedButton(
-              //       style: ElevatedButton.styleFrom(
-              //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              //       ),
-              //       child: const Text('Add to the Graph'),
-              //       onPressed: () {
-              //         ref.read(oldAngleProvider.notifier).state = rotationAngle;
-              //         ref.read(columnCountProvider.notifier).state++;
-              //         // ref.read(colorProvider.notifier).state = Colors.grey;
-              //       },
-              //     ),
-              //     const SizedBox(width: 15),
-              //     ElevatedButton(
-              //       style: ElevatedButton.styleFrom(
-              //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              //       ),
-              //       child: const Text('Go to Counter Page'),
-              //       onPressed: () {
-              //         Navigator.of(context).push(
-              //           MaterialPageRoute(
-              //             builder: (context) => const CounterPage(),
-              //           ),
-              //         );
-              //       },
-              //     ),
-              //   ],
-              // ),
           ]),
         ),
       ),

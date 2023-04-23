@@ -27,7 +27,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: const HomePage(),
+      routes: {
+        '/home':(context) => const HomePage(),
+        // '/counter':(context) => Counter(),
+      },
     );
   }
 }

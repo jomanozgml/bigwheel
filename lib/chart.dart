@@ -13,7 +13,6 @@ class ChartPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final int columnCount = ref.watch(columnCountProvider);
-    // final Color color = ref.watch(colorProvider);
     if (columnCount > positions.length){
       positions.add(position);
       if (difference.abs() > 27){
