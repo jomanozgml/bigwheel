@@ -4,9 +4,9 @@ import 'chart.dart';
 import 'counter.dart';
 import 'dart:math';
 
-final rotationAngleProvider = StateProvider.autoDispose((ref) => 0.0);
-final oldAngleProvider = StateProvider.autoDispose((ref) => 0.0);
-final columnCountProvider = StateProvider.autoDispose((ref) => 0);
+final rotationAngleProvider = StateProvider((ref) => 0.0);
+final oldAngleProvider = StateProvider((ref) => 0.0);
+final columnCountProvider = StateProvider((ref) => 0);
 double position = 0.0;
 double difference = 0.0;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
