@@ -31,6 +31,7 @@ class ChartPage extends ConsumerWidget {
           child: ListView(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
+            reverse: true,
               children: List.generate(
                 columnCount,
                 (index) => Text('${differences[index]}, ', style: textStyle),
@@ -66,6 +67,7 @@ class ChartPage extends ConsumerWidget {
               Expanded(
                 child: ListView(
                   scrollDirection: Axis.horizontal,
+                  reverse: true,
                   shrinkWrap: true,
                   children: List.generate(
                     columnCount,
