@@ -30,25 +30,19 @@ class DefaultFirebaseOptions {
             'you can reconfigure this by running the FlutterFire CLI again.',
           );
       }
-      
+
       // return kDebugMode ? dev : prod;
        // return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        // return android;
       case TargetPlatform.iOS:
-        return ios;
       case TargetPlatform.macOS:
-        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
       case TargetPlatform.linux:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
+          'DefaultFirebaseOptions have not been configured for this platform - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
@@ -76,32 +70,5 @@ class DefaultFirebaseOptions {
     authDomain: 'myth-1990.firebaseapp.com',
     storageBucket: 'myth-1990.appspot.com',
     measurementId: 'G-EG0B0WFTXS',
-  );
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCcjZTw6qZVmJXlixQ1fBK5QYA-qzKFaF8',
-    appId: '1:810739053255:android:b9cc835055470c1bbc84e2',
-    messagingSenderId: '810739053255',
-    projectId: 'myth-1990',
-    storageBucket: 'myth-1990.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCJwqRxIngzvdeBvJ9s4GEC82ptI57Q-Bc',
-    appId: '1:810739053255:ios:3e253da0ddee3978bc84e2',
-    messagingSenderId: '810739053255',
-    projectId: 'myth-1990',
-    storageBucket: 'myth-1990.appspot.com',
-    iosClientId: '810739053255-6vtko3ui3ohapdooicssitqn69ss1l0l.apps.googleusercontent.com',
-    iosBundleId: 'com.example.bigwheel',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCJwqRxIngzvdeBvJ9s4GEC82ptI57Q-Bc',
-    appId: '1:810739053255:ios:3e253da0ddee3978bc84e2',
-    messagingSenderId: '810739053255',
-    projectId: 'myth-1990',
-    storageBucket: 'myth-1990.appspot.com',
-    iosClientId: '810739053255-6vtko3ui3ohapdooicssitqn69ss1l0l.apps.googleusercontent.com',
-    iosBundleId: 'com.example.bigwheel',
   );
 }

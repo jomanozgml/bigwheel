@@ -36,5 +36,3 @@ VERSION CONTROL: GitHub with CI/CD Implementation
 
 ### Contact
 >If you have any questions or inquiries regarding this web application, please feel free to contact the developer at manoj.shrestha8080@gmail.com
-
-
