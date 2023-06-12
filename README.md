@@ -1,6 +1,6 @@
 ## BIGWHEEL GAME STATISTICS
 
-### INTRODUCTION
+### Introduction
 >This web application generates a bar chart based on the previous spin results of the **BIGWHEEL** game played in a casino. It provides a visual representation; *bar chart* of the frequency distribution of the different spin outcomes, allowing users to analyze the data easily.
 
 ### TECH-STACK
@@ -11,7 +11,11 @@ VERSION CONTROL: GitHub with CI/CD Implementation
 ```
 ### Web Application URLs
 `Development ENV:` https://spinbigwheel.web.app/
+
 `Production ENV :` https://mangalshova.com.np/
+
+### Screenshot
+![BIGWHEEL_APP](/assets/images/bigwheel_app.webp)
 
 ### Setup and Configuration
 1. Clone the GitHub repository: https://github.com/jomanozgml/bigwheel
