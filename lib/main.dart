@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// To run the program in dev environment type
 /// flutter run -d chrome --dart-define=FLAVOR=dev
@@ -11,6 +12,7 @@ import 'firebase_options.dart';
 // fireabase deploy -P site-one --only hosting:app-id-one
 
 void main() async{
+  await dotenv.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
