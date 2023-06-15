@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform, kIsWeb;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -35,9 +35,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // final String measurementIdDev = dotenv.env['measurementId']!;
 
 String getAPI(String label){
-  final String value = window.localStorage.containsKey('CI')
-    ? window.localStorage[label]!
-    : dotenv.env[label]!;
+  final String value = //window.localStorage.containsKey('CI')
+    window.localStorage[label]!;
+    // : dotenv.env[label]!;
   return value;
 }
 // Prod env
