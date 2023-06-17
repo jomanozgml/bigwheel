@@ -12,22 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-        # env:
-        #   apiKey: '${{ secrets.APIKEY }}'
-        #   authDomain: '${{ secrets.AUTHDOMAIN }}'
-        #   projectId: '${{ secrets.PROJECTID }}'
-        #   storageBucket: '${{ secrets.STORAGEBUCKET }}'
-        #   messagingSenderId: '${{ secrets.MESSAGINGSENDERID }}'
-        #   appId: '${{ secrets.APPID }}'
-        #   measurementId: '${{ secrets.MEASUREMENTID }}'
-
-        #   apiKeyProd: '${{ secrets.APIKEYPROD }}'
-        #   authDomainProd: '${{ secrets.AUTHDOMAINPROD }}'
-        #   projectIdProd: '${{ secrets.PROJECTIDPROD }}'
-        #   storageBucketProd: '${{ secrets.STORAGEBUCKETPROD }}'
-        #   messagingSenderIdProd: '${{ secrets.MESSAGINGSENDERIDPROD }}'
-        #   appIdProd: '${{ secrets.APPIDPROD }}'
-        #   measurementIdProd: '${{ secrets.MEASUREMENTIDPROD }}'
       - run: echo $ENV_KEY | base64 -d > lib/secrets.dart
         env:
           ENV_KEY: ${{ secrets.ENV_KEY }}
