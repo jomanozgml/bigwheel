@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-      - run: echo ${{ secrets.ENV_KEY}} | base64 -d > lib/secrets.dart
-        # env:
-        #   ENV_KEY: ${{ secrets.ENV_KEY }}
+      - run: echo $ENV_KEY | base64 -d > lib/secret.dart
+        env:
+          ENV_KEY: ${{ secrets.ENV_KEY }}
       - run: flutter build web --dart-define=FLAVOR=dev
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
