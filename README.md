@@ -21,7 +21,20 @@ VERSION CONTROL: GitHub with CI/CD Implementation
 1. Clone the GitHub repository: https://github.com/jomanozgml/bigwheel
 2. Install Flutter and Dart on your local development machine.
 3. Configure the necessary Firebase project and obtain the Firebase configuration.
-4. Update the Firebase configuration in the Flutter project to connect to your Cloud Firestore instance.
+4. Update the Firebase configuration in the Flutter project to connect to your Cloud Firestore instance. Create `secret.dart` file inside `lib\` folder containing API information from FireStore in following format:
+```
+class Secrets{
+  Map<String, String> secretsMap = {
+    // Dev env API
+    'apiKey': 'paste api here',
+    'authDomain': 'paste auth domain here',
+    ... likewise
+
+    //Prod env API
+    ... same as above
+  };
+}
+```
 5. Build and run the Flutter application locally by running **main.dart** file
 6. Deploy to created Firebase project
 7. Set up CI/CD using GitHub Actions or any other preferred CI/CD tool to automate the deployment process to the production environment.
