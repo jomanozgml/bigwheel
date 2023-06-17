@@ -28,7 +28,7 @@ jobs:
         #   messagingSenderIdProd: '${{ secrets.MESSAGINGSENDERIDPROD }}'
         #   appIdProd: '${{ secrets.APPIDPROD }}'
         #   measurementIdProd: '${{ secrets.MEASUREMENTIDPROD }}'
-      - run: echo $ENV_KEY | base64 -d > lib/secrets.dart
+      - run: echo $ENV_KEY | base64 -d > lib/path/to/secrets.dart
         env:
           ENV_KEY: ${{ secrets.ENV_KEY }}
       - run: flutter build web --dart-define=FLAVOR=dev
