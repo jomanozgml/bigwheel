@@ -17,7 +17,7 @@ migrate_working_dir/
 .idea/
 
 # exclude all dev and prod env API from source control
-secrets.dart
+secret.dart
 *.env
 
 # The .vscode folder contains launch configuration and tasks you configure in
