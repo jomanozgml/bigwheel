@@ -1,12 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'chart.dart';
 import 'counter.dart';
 import 'dart:math';
 
+/// To run the program in prod environment, type in terminal
+/// flutter run -d chrome --dart-define=FLAVOR=prod
+/// For dev environment, flutter run -d chrome --dart-define=FLAVOR=dev
+/// or simply 'flutter run' since default flavor is dev
+
+void main () async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const ProviderScope(child: HomePage()));
+}
+
 final rotationAngleProvider = StateProvider((ref) => 0.0);
 final oldAngleProvider = StateProvider((ref) => 0.0);
 final columnCountProvider = StateProvider((ref) => 0);
+FirebaseFirestore firestore = FirebaseFirestore.instance;
+DocumentReference spindataDocument = firestore.collection('logs').doc('spindata');
 double position = 0.0;
 double difference = 0.0;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
@@ -88,6 +106,14 @@ class HomePage extends ConsumerWidget {
                       onPressed: () {
                         ref.read(oldAngleProvider.notifier).state = rotationAngle;
                         ref.read(columnCountProvider.notifier).state++;
+                        try {
+                          spindataDocument.update({
+                            'position': FieldValue.arrayUnion([position.round() == 54 ? 0 : position.round()]),
+                            'difference': FieldValue.arrayUnion([((rotationAngle - oldAngle) / 6.667).round()])
+                          });
+                        } catch (e) {
+                          print('Error: $e');
+                        }
                       },
                     ),
               ),

@@ -54,11 +54,11 @@ class ChartPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 216,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [Text('54', style: textStyle), Text('41', style: textStyle,),
+                  children: [Text('54', style: textStyle), Text('41', style: textStyle,),
                     Text('27', style:textStyle), Text('14', style: textStyle), Text('0', style: textStyle)],
                 ),
               ),
