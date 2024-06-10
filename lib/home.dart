@@ -25,8 +25,8 @@ final oldAngleProvider = StateProvider((ref) => 0.0);
 final columnCountProvider = StateProvider((ref) => 0);
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 DocumentReference spindataDocument = firestore.collection('logs').doc('spindata');
-double position = 0.0;
-double difference = 0.0;
+int position = 0;
+int difference = 0;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
 
 class HomePage extends ConsumerWidget {
@@ -56,7 +56,7 @@ class HomePage extends ConsumerWidget {
           child: Column(
             children: [
               // const SizedBox(height: 15),
-              ChartPage(position.round() == 54 ? 0: position.round(), difference.round()),
+              ChartPage(position, difference),
               const SizedBox(height: 10),
               const Icon(Icons.arrow_downward_sharp, size: 30, color: Colors.white),
               GestureDetector(
@@ -65,8 +65,9 @@ class HomePage extends ConsumerWidget {
                   double dy = details.delta.dy ;
                   double angle = atan2(dy, dx);
                   ref.read(rotationAngleProvider.notifier).state += angle *0.333;
-                  position = (rotationAngle/6.667 % 54);
-                  difference = ((rotationAngle - oldAngle)/6.667);
+                  int tempPosition = (rotationAngle/6.667 % 54).round().toInt();
+                  position = tempPosition == 54 ? 0: tempPosition;
+                  difference = ((rotationAngle-oldAngle)/6.667).round().toInt();
                 },
                 child: Transform.rotate(
                   angle: rotationAngle * pi / 180,
@@ -89,10 +90,10 @@ class HomePage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Position: ', style: textStyle),
-                  Text((position.round() == 54 ? 0: position.round()).toString(), style: textStyle),
+                  Text(position.toString(), style: textStyle),
                   const SizedBox(width: 25),
                   const Text('Difference: ', style: textStyle),
-                  Text(((rotationAngle-oldAngle)/6.667).round().toString(), style: textStyle),
+                  Text(difference.toString(), style: textStyle),
                 ],
               ),
               const SizedBox(height: 10),
@@ -108,10 +109,11 @@ class HomePage extends ConsumerWidget {
                         ref.read(columnCountProvider.notifier).state++;
                         try {
                           spindataDocument.update({
-                            'position': FieldValue.arrayUnion([position.round() == 54 ? 0 : position.round()]),
-                            'difference': FieldValue.arrayUnion([((rotationAngle - oldAngle) / 6.667).round()])
+                            'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                            'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
                           });
                         } catch (e) {
+                          // ignore: avoid_print
                           print('Error: $e');
                         }
                       },
@@ -127,8 +129,9 @@ class HomePage extends ConsumerWidget {
                   divisions: 360,
                   onChanged: (value) {
                     ref.read(rotationAngleProvider.notifier).state = value;
-                    position = (rotationAngle/6.667 % 54);
-                    difference = ((rotationAngle - oldAngle)/6.667);
+                    int tempPosition = (rotationAngle/6.667 % 54).round().toInt();
+                    position = tempPosition == 54 ? 0: tempPosition;
+                    difference = ((rotationAngle-oldAngle)/6.667).round().toInt();
                   },
                 ),
               ),
