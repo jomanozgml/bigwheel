@@ -33,14 +33,14 @@ class ChartPage extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
               children: List.generate(
                 columnCount,
-                (index) => Text('${differences[index]}, ', style: textStyle),
+                (index) => Text('${differences[index]}, ', style: textStyle, textScaleFactor: 0.8),
               ),
             ),
         ),
         const SizedBox(height: 5),
         Container(
           width: double.infinity,
-          height: 238,
+          height: 0.8 * 238,
           margin: const EdgeInsets.symmetric(horizontal: 15),
           decoration: const BoxDecoration(
             border: Border(
@@ -55,7 +55,7 @@ class ChartPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const SizedBox(
-                height: 216,
+                height: 0.8 * 216,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [Text('54', style: textStyle), Text('41', style: textStyle,),
@@ -72,10 +72,10 @@ class ChartPage extends ConsumerWidget {
                     (index) => Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(positions[index].toString(), style: textStyle),
+                        Text(positions[index].toString(), style: textStyle, textScaleFactor: 0.8),
                         Container(
-                          width: 10,
-                          height: positions[index] * 4,
+                          width: 6,
+                          height: positions[index] * 4 * 0.8,
                           // color: color,
                           color: Colors.lightBlueAccent,
                           margin: const EdgeInsets.symmetric(horizontal: 2),

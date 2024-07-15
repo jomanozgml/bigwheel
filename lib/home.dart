@@ -27,6 +27,7 @@ FirebaseFirestore firestore = FirebaseFirestore.instance;
 DocumentReference spindataDocument = firestore.collection('logs').doc('spindata');
 int position = 0;
 int difference = 0;
+bool isFirstSave = true;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
 
 class HomePage extends ConsumerWidget {
@@ -55,9 +56,44 @@ class HomePage extends ConsumerWidget {
         child: Center(
           child: Column(
             children: [
-              // const SizedBox(height: 15),
               ChartPage(position, difference),
               const SizedBox(height: 10),
+              Table(
+                border: TableBorder.all(color: Colors.white),
+                children: const [
+                  TableRow(
+                    children: [
+                      TableCell(child: Center(child: Text('Pos', style: textStyle))),
+                      TableCell(child: Center(child: Text('2', style: textStyle))),
+                      TableCell(child: Center(child: Text('3', style: textStyle))),
+                      TableCell(child: Center(child: Text('4', style: textStyle))),
+                      TableCell(child: Center(child: Text('5', style: textStyle))),
+                      TableCell(child: Center(child: Text('6', style: textStyle))),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(child: Center(child: Text('Diff', style: textStyle))),
+                      TableCell(child: Center(child: Text('7', style: textStyle))),
+                      TableCell(child: Center(child: Text('8', style: textStyle))),
+                      TableCell(child: Center(child: Text('9', style: textStyle))),
+                      TableCell(child: Center(child: Text('10', style: textStyle))),
+                      TableCell(child: Center(child: Text('11', style: textStyle))),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      TableCell(child: Center(child: Text('Num', style: textStyle))),
+                      TableCell(child: Center(child: Text('12', style: textStyle))),
+                      TableCell(child: Center(child: Text('13', style: textStyle))),
+                      TableCell(child: Center(child: Text('14', style: textStyle))),
+                      TableCell(child: Center(child: Text('15', style: textStyle))),
+                      TableCell(child: Center(child: Text('16', style: textStyle))),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
               const Icon(Icons.arrow_downward_sharp, size: 30, color: Colors.white),
               GestureDetector(
                 onPanUpdate: (details) {
@@ -108,10 +144,18 @@ class HomePage extends ConsumerWidget {
                         ref.read(oldAngleProvider.notifier).state = rotationAngle;
                         ref.read(columnCountProvider.notifier).state++;
                         try {
-                          spindataDocument.update({
-                            'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
-                            'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
-                          });
+                          if (!isFirstSave) {
+                            spindataDocument.update({
+                              'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                              'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
+                            });
+                          } else {
+                            isFirstSave = false;
+                          }
+                          // spindataDocument.update({
+                          //   'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                          //   'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
+                          // });
                         } catch (e) {
                           // ignore: avoid_print
                           print('Error: $e');
