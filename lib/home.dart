@@ -179,6 +179,11 @@ class HomePage extends ConsumerWidget {
                           // ignore: avoid_print
                           print('Next Position: $nextPosition');
                         }
+                        int nextDifference = findNextDifference();
+                        if(nextDifference != -99){
+                          // ignore: avoid_print
+                          print('Next Difference: $nextDifference');
+                        }
                         // try {
                         //   if (!isFirstSave) {
                         //     spindataDocument.update({
@@ -232,12 +237,27 @@ class HomePage extends ConsumerWidget {
     return -1;
   }
 
+  int findNextDifference(){
+    for(int len = 4; len >= 2; len--){
+      if(differences.length >= len){
+        List<dynamic> latestDifferences = differences.sublist(differences.length - len);
+        for(int i = 0; i <= differenceList.length - len; i++){
+          List<dynamic> subList = differenceList.sublist(i, i + len);
+          if(listEquals(latestDifferences, subList)){
+            return differenceList[i + len + 1];
+          }
+        }
+      }
+    }
+    return -99;
+  }
+
   bool listEquals(List<dynamic> list1, List<dynamic> list2){
     if(list1.length != list2.length){
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if(list1[i] != list2[i]){
+      if((list1[i] - list2[i]).abs() > 3){
         return false;
       }
     }
