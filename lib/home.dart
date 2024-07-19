@@ -28,7 +28,10 @@ DocumentReference spindataDocument = firestore.collection('logs').doc('spindata'
 int position = 0;
 int difference = 0;
 bool isFirstSave = true;
+bool isDataRetrieved = false;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
+List<int> positionList = [];
+List<int> differenceList = [];
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -37,6 +40,32 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double rotationAngle = ref.watch(rotationAngleProvider);
     final double oldAngle = ref.watch(oldAngleProvider);
+
+    if(!isDataRetrieved){
+      isDataRetrieved = true;
+    // ignore: avoid_print
+    print('Getting Data from Firestore');
+
+    spindataDocument.get().then(
+        (DocumentSnapshot doc){
+          final data = doc.data() as Map<String, dynamic>;
+          final positionData = data['position'];
+          final differenceData = data['difference'];
+          for (var item in positionData) {
+            positionList.add(item['value']);
+          }
+          for (var item in differenceData) {
+            differenceList.add(item['value']);
+          }
+          // // ignore: avoid_print
+          //   print(positionList);
+          //   // ignore: avoid_print
+          //   print(differenceList);
+          },
+          // ignore: avoid_print
+          onError: (error) => print('Error: $error'),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.black87,
@@ -143,23 +172,26 @@ class HomePage extends ConsumerWidget {
                       onPressed: () {
                         ref.read(oldAngleProvider.notifier).state = rotationAngle;
                         ref.read(columnCountProvider.notifier).state++;
-                        try {
-                          if (!isFirstSave) {
-                            spindataDocument.update({
-                              'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
-                              'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
-                            });
-                          } else {
-                            isFirstSave = false;
-                          }
-                          // spindataDocument.update({
-                          //   'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
-                          //   'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
-                          // });
-                        } catch (e) {
+                        // positionList.add(position);
+                        // differenceList.add(difference);
+                        int nextPosition = findNextPosition();
+                        if(nextPosition != -1){
                           // ignore: avoid_print
-                          print('Error: $e');
+                          print('Next Position: $nextPosition');
                         }
+                        // try {
+                        //   if (!isFirstSave) {
+                        //     spindataDocument.update({
+                        //       'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                        //       'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
+                        //     });
+                        //   } else {
+                        //     isFirstSave = false;
+                        //   }
+                        // } catch (e) {
+                        //   // ignore: avoid_print
+                        //   print('Error: $e');
+                        // }
                       },
                     ),
               ),
@@ -183,5 +215,32 @@ class HomePage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  int findNextPosition(){
+    for(int len = 4; len >= 2; len--){
+      if(positions.length >= len){
+        List<dynamic> latestPositions = positions.sublist(positions.length - len);
+        for(int i = 0; i <= positionList.length - len; i++){
+          List<dynamic> subList = positionList.sublist(i, i + len);
+          if(listEquals(latestPositions, subList)){
+            return positionList[i + len + 1];
+          }
+        }
+      }
+    }
+    return -1;
+  }
+
+  bool listEquals(List<dynamic> list1, List<dynamic> list2){
+    if(list1.length != list2.length){
+      return false;
+    }
+    for(int i = 0; i < list1.length; i++){
+      if(list1[i] != list2[i]){
+        return false;
+      }
+    }
+    return true;
   }
 }
