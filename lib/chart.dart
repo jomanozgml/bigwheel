@@ -15,11 +15,7 @@ class ChartPage extends ConsumerWidget {
     final int columnCount = ref.watch(columnCountProvider);
     if (columnCount > positions.length){
       positions.add(position);
-      if (difference.abs() > 27){
-        differences.add(difference.abs()-53);
-        } else {
-          differences.add(difference);
-        }
+      differences.add(difference);
     }
     return Column(
       children: [

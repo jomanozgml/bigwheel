@@ -32,6 +32,8 @@ bool isDataRetrieved = false;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
 List<int> positionList = [];
 List<int> differenceList = [];
+List<int> nextPositionList = [];
+List<int> nextDifferenceList = [];
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -48,19 +50,21 @@ class HomePage extends ConsumerWidget {
 
     spindataDocument.get().then(
         (DocumentSnapshot doc){
-          final data = doc.data() as Map<String, dynamic>;
-          final positionData = data['position'];
-          final differenceData = data['difference'];
-          for (var item in positionData) {
-            positionList.add(item['value']);
-          }
-          for (var item in differenceData) {
-            differenceList.add(item['value']);
-          }
-          // // ignore: avoid_print
-          //   print(positionList);
-          //   // ignore: avoid_print
-          //   print(differenceList);
+          if(doc.exists){
+            final data = doc.data() as Map<String, dynamic>;
+            final positionData = data['position'];
+            final differenceData = data['difference'];
+            for (var item in positionData) {
+              positionList.add(item['value']);
+            }
+            for (var item in differenceData) {
+              differenceList.add(item['value']);
+            }
+            // // ignore: avoid_print
+            //   print(positionList);
+            //   // ignore: avoid_print
+            //   print(differenceList);
+            }
           },
           // ignore: avoid_print
           onError: (error) => print('Error: $error'),
@@ -124,7 +128,7 @@ class HomePage extends ConsumerWidget {
               ),
               const SizedBox(height: 5),
               const Icon(Icons.arrow_downward_sharp, size: 30, color: Colors.white),
-              GestureDetector(
+                GestureDetector(
                 onPanUpdate: (details) {
                   double dx = details.delta.dx ;
                   double dy = details.delta.dy ;
@@ -133,23 +137,31 @@ class HomePage extends ConsumerWidget {
                   int tempPosition = (rotationAngle/6.667 % 54).round().toInt();
                   position = tempPosition == 54 ? 0: tempPosition;
                   difference = ((rotationAngle-oldAngle)/6.667).round().toInt();
+                  if (difference > 27) {
+                  difference -= 54;
+                  } else if (difference < -27) {
+                  difference += 54;
+                  }
+                  if (rotationAngle >= 360 || rotationAngle <= -360) {
+                  ref.read(rotationAngleProvider.notifier).state = 0.0;
+                  }
                 },
                 child: Transform.rotate(
                   angle: rotationAngle * pi / 180,
                   child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(color: Colors.white12, blurRadius: 2)],
-                    ),
-                    child: Image.asset(
-                      "assets/images/bigWheel.png",
-                      width: 360,
-                      height: 360,
-                    ),
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [BoxShadow(color: Colors.white12, blurRadius: 2)],
+                  ),
+                  child: Image.asset(
+                    "assets/images/bigWheel.png",
+                    width: 360,
+                    height: 360,
+                  ),
                   )
                 ),
-              ),
+                ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -172,31 +184,31 @@ class HomePage extends ConsumerWidget {
                       onPressed: () {
                         ref.read(oldAngleProvider.notifier).state = rotationAngle;
                         ref.read(columnCountProvider.notifier).state++;
-                        // positionList.add(position);
-                        // differenceList.add(difference);
-                        int nextPosition = findNextPosition();
-                        if(nextPosition != -1){
+                        positionList.add(position);
+                        differenceList.add(difference);
+                        findNextValue(positions, positionList, 'position');
+                        if(nextPositionList.isNotEmpty){
                           // ignore: avoid_print
-                          print('Next Position: $nextPosition');
+                          print('Next Position: $nextPositionList');
                         }
-                        int nextDifference = findNextDifference();
-                        if(nextDifference != -99){
+                        findNextValue(differences, differenceList, 'difference');
+                        if(nextDifferenceList.isNotEmpty ){
                           // ignore: avoid_print
-                          print('Next Difference: $nextDifference');
+                          print('Next Difference: $nextDifferenceList');
                         }
-                        // try {
-                        //   if (!isFirstSave) {
-                        //     spindataDocument.update({
-                        //       'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
-                        //       'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
-                        //     });
-                        //   } else {
-                        //     isFirstSave = false;
-                        //   }
-                        // } catch (e) {
-                        //   // ignore: avoid_print
-                        //   print('Error: $e');
-                        // }
+                        try {
+                          if (!isFirstSave) {
+                            spindataDocument.update({
+                              'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                              'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
+                            });
+                          } else {
+                            isFirstSave = false;
+                          }
+                        } catch (e) {
+                          // ignore: avoid_print
+                          print('Error: $e');
+                        }
                       },
                     ),
               ),
@@ -213,6 +225,11 @@ class HomePage extends ConsumerWidget {
                     int tempPosition = (rotationAngle/6.667 % 54).round().toInt();
                     position = tempPosition == 54 ? 0: tempPosition;
                     difference = ((rotationAngle-oldAngle)/6.667).round().toInt();
+                    if (difference > 27) {
+                      difference -= 54;
+                    } else if (difference < -27) {
+                      difference += 54;
+                    }
                   },
                 ),
               ),
@@ -222,42 +239,48 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  int findNextPosition(){
-    for(int len = 4; len >= 2; len--){
-      if(positions.length >= len){
-        List<dynamic> latestPositions = positions.sublist(positions.length - len);
-        for(int i = 0; i <= positionList.length - len; i++){
-          List<dynamic> subList = positionList.sublist(i, i + len);
-          if(listEquals(latestPositions, subList)){
-            return positionList[i + len + 1];
+  void findNextValue(List<dynamic> posAndDiff, List<int> posAndDiffList, String listType) {
+    for (int len = 5; len >= 2; len--) {
+      if (posAndDiff.length >= len) {
+        List<dynamic> latestPosAndDiff = posAndDiff.sublist(posAndDiff.length - len);
+        for (int i = 0; i <= posAndDiffList.length - 2*len; i++) {
+          List<dynamic> subList = posAndDiffList.sublist(i, i + len);
+          if (listEquals(latestPosAndDiff, subList)) {
+            if (listType == 'position') {
+              nextPositionList.add(posAndDiffList[i + len + 1]);
+              print('Next Position: $nextPositionList');
+            } else if (listType == 'difference') {
+              nextDifferenceList.add(posAndDiffList[i + len + 1]);
+              print('Next Difference: $nextDifferenceList');
+            }
           }
         }
       }
     }
-    return -1;
   }
 
-  int findNextDifference(){
-    for(int len = 4; len >= 2; len--){
-      if(differences.length >= len){
-        List<dynamic> latestDifferences = differences.sublist(differences.length - len);
-        for(int i = 0; i <= differenceList.length - len; i++){
-          List<dynamic> subList = differenceList.sublist(i, i + len);
-          if(listEquals(latestDifferences, subList)){
-            return differenceList[i + len + 1];
-          }
-        }
-      }
-    }
-    return -99;
-  }
+  // List<int> findNextDifference(){
+  //   for(int len = 4; len >= 2; len--){
+  //     if(differences.length >= len){
+  //       List<dynamic> latestDifferences = differences.sublist(differences.length - len);
+  //       for(int i = 0; i <= differenceList.length - len - 4; i++){
+  //         List<dynamic> subList = differenceList.sublist(i, i + len);
+  //         if(listEquals(latestDifferences, subList)){
+  //           // return differenceList[i + len + 1];
+  //           nextDifferenceList.add(differenceList[i + len + 1]);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return [];
+  // }
 
   bool listEquals(List<dynamic> list1, List<dynamic> list2){
     if(list1.length != list2.length){
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if((list1[i] - list2[i]).abs() > 3){
+      if((list1[i] - list2[i]).abs() > 2){
         return false;
       }
     }
