@@ -60,11 +60,7 @@ class HomePage extends ConsumerWidget {
             for (var item in differenceData) {
               differenceList.add(item['value']);
             }
-            // // ignore: avoid_print
-            //   print(positionList);
-            //   // ignore: avoid_print
-            //   print(differenceList);
-            }
+          }
           },
           // ignore: avoid_print
           onError: (error) => print('Error: $error'),
@@ -93,37 +89,39 @@ class HomePage extends ConsumerWidget {
               const SizedBox(height: 10),
               Table(
                 border: TableBorder.all(color: Colors.white),
-                children: const [
+                children: [
                   TableRow(
                     children: [
-                      TableCell(child: Center(child: Text('Pos', style: textStyle))),
-                      TableCell(child: Center(child: Text('2', style: textStyle))),
-                      TableCell(child: Center(child: Text('3', style: textStyle))),
-                      TableCell(child: Center(child: Text('4', style: textStyle))),
-                      TableCell(child: Center(child: Text('5', style: textStyle))),
-                      TableCell(child: Center(child: Text('6', style: textStyle))),
+                      const TableCell(child: Center(child: Text('Pos', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.isNotEmpty ? nextPositionList[0].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.length > 1 ? nextPositionList[1].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.length > 2 ? nextPositionList[2].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.length > 3 ? nextPositionList[3].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.length > 4 ? nextPositionList[4].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.length >= 5 ? nextPositionList[5].toString() : '', style: textStyle))),
                     ],
                   ),
                   TableRow(
                     children: [
-                      TableCell(child: Center(child: Text('Diff', style: textStyle))),
-                      TableCell(child: Center(child: Text('7', style: textStyle))),
-                      TableCell(child: Center(child: Text('8', style: textStyle))),
-                      TableCell(child: Center(child: Text('9', style: textStyle))),
-                      TableCell(child: Center(child: Text('10', style: textStyle))),
-                      TableCell(child: Center(child: Text('11', style: textStyle))),
+                      const TableCell(child: Center(child: Text('Diff', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.isNotEmpty ? nextDifferenceList[0].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.length > 1 ? nextDifferenceList[1].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.length > 2 ? nextDifferenceList[2].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.length > 3 ? nextDifferenceList[3].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.length > 4 ? nextDifferenceList[4].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.length >= 5 ? nextDifferenceList[5].toString() : '', style: textStyle))),
                     ],
                   ),
-                  TableRow(
-                    children: [
-                      TableCell(child: Center(child: Text('Num', style: textStyle))),
-                      TableCell(child: Center(child: Text('12', style: textStyle))),
-                      TableCell(child: Center(child: Text('13', style: textStyle))),
-                      TableCell(child: Center(child: Text('14', style: textStyle))),
-                      TableCell(child: Center(child: Text('15', style: textStyle))),
-                      TableCell(child: Center(child: Text('16', style: textStyle))),
-                    ],
-                  ),
+                  // TableRow(
+                  //   children: [
+                  //     TableCell(child: Center(child: Text('Num', style: textStyle))),
+                  //     TableCell(child: Center(child: Text('12', style: textStyle))),
+                  //     TableCell(child: Center(child: Text('13', style: textStyle))),
+                  //     TableCell(child: Center(child: Text('14', style: textStyle))),
+                  //     TableCell(child: Center(child: Text('15', style: textStyle))),
+                  //     TableCell(child: Center(child: Text('16', style: textStyle))),
+                  //   ],
+                  // ),
                 ],
               ),
               const SizedBox(height: 5),
@@ -186,16 +184,12 @@ class HomePage extends ConsumerWidget {
                         ref.read(columnCountProvider.notifier).state++;
                         positionList.add(position);
                         differenceList.add(difference);
+                        // Empty the nextPositionList and nextDifferenceList
+                        nextPositionList.clear();
+                        nextDifferenceList.clear();
+                        // Find the next value of position and difference
                         findNextValue(positions, positionList, 'position');
-                        if(nextPositionList.isNotEmpty){
-                          // ignore: avoid_print
-                          print('Next Position: $nextPositionList');
-                        }
                         findNextValue(differences, differenceList, 'difference');
-                        if(nextDifferenceList.isNotEmpty ){
-                          // ignore: avoid_print
-                          print('Next Difference: $nextDifferenceList');
-                        }
                         try {
                           if (!isFirstSave) {
                             spindataDocument.update({
@@ -240,18 +234,21 @@ class HomePage extends ConsumerWidget {
   }
 
   void findNextValue(List<dynamic> posAndDiff, List<int> posAndDiffList, String listType) {
-    for (int len = 5; len >= 2; len--) {
+    for (int len = 6; len >= 3; len--) {
       if (posAndDiff.length >= len) {
         List<dynamic> latestPosAndDiff = posAndDiff.sublist(posAndDiff.length - len);
-        for (int i = 0; i <= posAndDiffList.length - 2*len; i++) {
+        for (int i = 0; i <= posAndDiffList.length - 2 * len; i++) {
           List<dynamic> subList = posAndDiffList.sublist(i, i + len);
           if (listEquals(latestPosAndDiff, subList)) {
+            var nextValue = posAndDiffList[i + len];
             if (listType == 'position') {
-              nextPositionList.add(posAndDiffList[i + len + 1]);
-              print('Next Position: $nextPositionList');
+              nextPositionList.add(nextValue);
+              // ignore: avoid_print
+              print('Next Positions: $nextPositionList');
             } else if (listType == 'difference') {
-              nextDifferenceList.add(posAndDiffList[i + len + 1]);
-              print('Next Difference: $nextDifferenceList');
+              nextDifferenceList.add(nextValue);
+              // ignore: avoid_print
+              print('Next Differences: $nextDifferenceList');
             }
           }
         }
@@ -259,28 +256,12 @@ class HomePage extends ConsumerWidget {
     }
   }
 
-  // List<int> findNextDifference(){
-  //   for(int len = 4; len >= 2; len--){
-  //     if(differences.length >= len){
-  //       List<dynamic> latestDifferences = differences.sublist(differences.length - len);
-  //       for(int i = 0; i <= differenceList.length - len - 4; i++){
-  //         List<dynamic> subList = differenceList.sublist(i, i + len);
-  //         if(listEquals(latestDifferences, subList)){
-  //           // return differenceList[i + len + 1];
-  //           nextDifferenceList.add(differenceList[i + len + 1]);
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return [];
-  // }
-
   bool listEquals(List<dynamic> list1, List<dynamic> list2){
     if(list1.length != list2.length){
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if((list1[i] - list2[i]).abs() > 2){
+      if((list1[i] - list2[i]).abs() > 3){
         return false;
       }
     }
