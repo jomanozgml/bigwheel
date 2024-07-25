@@ -32,6 +32,8 @@ bool isDataRetrieved = false;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
 List<int> positionList = [];
 List<int> differenceList = [];
+List latestPosition = positions;
+List latestDifference = differences;
 List<int> nextPositionList = [];
 List<int> nextDifferenceList = [];
 
@@ -182,14 +184,16 @@ class HomePage extends ConsumerWidget {
                       onPressed: () {
                         ref.read(oldAngleProvider.notifier).state = rotationAngle;
                         ref.read(columnCountProvider.notifier).state++;
+                        latestPosition.add(position);
+                        latestDifference.add(difference);
                         positionList.add(position);
                         differenceList.add(difference);
                         // Empty the nextPositionList and nextDifferenceList
                         nextPositionList.clear();
                         nextDifferenceList.clear();
                         // Find the next value of position and difference
-                        findNextValue(positions, positionList, 'position');
-                        findNextValue(differences, differenceList, 'difference');
+                        findNextValue(latestPosition, positionList, 'position');
+                        findNextValue(latestDifference, differenceList, 'difference');
                         try {
                           if (!isFirstSave) {
                             spindataDocument.update({
@@ -243,12 +247,8 @@ class HomePage extends ConsumerWidget {
             var nextValue = posAndDiffList[i + len];
             if (listType == 'position') {
               nextPositionList.add(nextValue);
-              // ignore: avoid_print
-              print('Next Positions: $nextPositionList');
             } else if (listType == 'difference') {
               nextDifferenceList.add(nextValue);
-              // ignore: avoid_print
-              print('Next Differences: $nextDifferenceList');
             }
           }
         }
@@ -261,7 +261,7 @@ class HomePage extends ConsumerWidget {
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if((list1[i] - list2[i]).abs() > 3){
+      if((list1[i] - list2[i]).abs() > 2){
         return false;
       }
     }
