@@ -100,7 +100,7 @@ class HomePage extends ConsumerWidget {
                       TableCell(child: Center(child: Text(nextPositionList.length > 2 ? nextPositionList[2].toString() : '', style: textStyle))),
                       TableCell(child: Center(child: Text(nextPositionList.length > 3 ? nextPositionList[3].toString() : '', style: textStyle))),
                       TableCell(child: Center(child: Text(nextPositionList.length > 4 ? nextPositionList[4].toString() : '', style: textStyle))),
-                      TableCell(child: Center(child: Text(nextPositionList.length >= 5 ? nextPositionList[5].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionList.length > 5 ? nextPositionList[5].toString() : '', style: textStyle))),
                     ],
                   ),
                   TableRow(
@@ -111,7 +111,7 @@ class HomePage extends ConsumerWidget {
                       TableCell(child: Center(child: Text(nextDifferenceList.length > 2 ? nextDifferenceList[2].toString() : '', style: textStyle))),
                       TableCell(child: Center(child: Text(nextDifferenceList.length > 3 ? nextDifferenceList[3].toString() : '', style: textStyle))),
                       TableCell(child: Center(child: Text(nextDifferenceList.length > 4 ? nextDifferenceList[4].toString() : '', style: textStyle))),
-                      TableCell(child: Center(child: Text(nextDifferenceList.length >= 5 ? nextDifferenceList[5].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextDifferenceList.length > 5 ? nextDifferenceList[5].toString() : '', style: textStyle))),
                     ],
                   ),
                   // TableRow(
