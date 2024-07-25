@@ -261,7 +261,7 @@ class HomePage extends ConsumerWidget {
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if((list1[i] - list2[i]).abs() > 3){
+      if((list1[i] - list2[i]).abs() > 2){
         return false;
       }
     }
