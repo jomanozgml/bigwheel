@@ -243,14 +243,14 @@ class HomePage extends ConsumerWidget {
         List<dynamic> latestPosAndDiff = posAndDiff.sublist(posAndDiff.length - len);
         for (int i = 0; i <= posAndDiffList.length - 2 * len; i++) {
           List<dynamic> subList = posAndDiffList.sublist(i, i + len);
-          if (listEquals(latestPosAndDiff, subList)) {
-            var nextValue = posAndDiffList[i + len];
-            if (listType == 'position') {
-              nextPositionList.add(nextValue);
-            } else if (listType == 'difference') {
-              nextDifferenceList.add(nextValue);
+            if (listEquals(latestPosAndDiff, subList)) {
+              var nextValue = posAndDiffList[i + len];
+              if (listType == 'position' && !nextPositionList.contains(nextValue)) {
+                nextPositionList.add(nextValue);
+              } else if (listType == 'difference' && !nextDifferenceList.contains(nextValue)) {
+                nextDifferenceList.add(nextValue);
+              }
             }
-          }
         }
       }
     }
@@ -261,7 +261,7 @@ class HomePage extends ConsumerWidget {
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if((list1[i] - list2[i]).abs() > 2){
+      if((list1[i] - list2[i]).abs() > 3){
         return false;
       }
     }
