@@ -194,19 +194,19 @@ class HomePage extends ConsumerWidget {
                         // Find the next value of position and difference
                         findNextValue(latestPosition, positionList, 'position');
                         findNextValue(latestDifference, differenceList, 'difference');
-                        try {
-                          if (!isFirstSave) {
-                            spindataDocument.update({
-                              'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
-                              'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
-                            });
-                          } else {
-                            isFirstSave = false;
-                          }
-                        } catch (e) {
-                          // ignore: avoid_print
-                          print('Error: $e');
-                        }
+                        // try {
+                        //   if (!isFirstSave) {
+                        //     spindataDocument.update({
+                        //       'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                        //       'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
+                        //     });
+                        //   } else {
+                        //     isFirstSave = false;
+                        //   }
+                        // } catch (e) {
+                        //   // ignore: avoid_print
+                        //   print('Error: $e');
+                        // }
                       },
                     ),
               ),
