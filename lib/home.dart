@@ -28,6 +28,7 @@ DocumentReference spindataDocument = firestore.collection('logs').doc('spindata'
 int position = 0;
 int difference = 0;
 bool isFirstSave = true;
+bool isPinCorrect = false;
 bool isDataRetrieved = false;
 const TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 14);
 List<int> positionList = [];
@@ -36,6 +37,7 @@ List latestPosition = positions;
 List latestDifference = differences;
 List<int> nextPositionList = [];
 List<int> nextDifferenceList = [];
+List<int> nextPositionFromDifferenceList = [];
 
 class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -114,16 +116,17 @@ class HomePage extends ConsumerWidget {
                       TableCell(child: Center(child: Text(nextDifferenceList.length > 5 ? nextDifferenceList[5].toString() : '', style: textStyle))),
                     ],
                   ),
-                  // TableRow(
-                  //   children: [
-                  //     TableCell(child: Center(child: Text('Num', style: textStyle))),
-                  //     TableCell(child: Center(child: Text('12', style: textStyle))),
-                  //     TableCell(child: Center(child: Text('13', style: textStyle))),
-                  //     TableCell(child: Center(child: Text('14', style: textStyle))),
-                  //     TableCell(child: Center(child: Text('15', style: textStyle))),
-                  //     TableCell(child: Center(child: Text('16', style: textStyle))),
-                  //   ],
-                  // ),
+                  TableRow(
+                    children: [
+                      const TableCell(child: Center(child: Text('DfPs', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionFromDifferenceList.isNotEmpty ? nextPositionFromDifferenceList[0].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionFromDifferenceList.length > 1 ? nextPositionFromDifferenceList[1].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionFromDifferenceList.length > 2 ? nextPositionFromDifferenceList[2].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionFromDifferenceList.length > 3 ? nextPositionFromDifferenceList[3].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionFromDifferenceList.length > 4 ? nextPositionFromDifferenceList[4].toString() : '', style: textStyle))),
+                      TableCell(child: Center(child: Text(nextPositionFromDifferenceList.length > 5 ? nextPositionFromDifferenceList[5].toString() : '', style: textStyle))),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 5),
@@ -171,6 +174,23 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(width: 25),
                   const Text('Difference: ', style: textStyle),
                   Text(difference.toString(), style: textStyle),
+                  const SizedBox(width: 25),
+                  SizedBox(
+                    width: 100,
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Pin',
+                      ),
+                      onChanged: (value) {
+                        if (value == '1111') {
+                          isPinCorrect = true;
+                        } else {
+                          isPinCorrect = false;
+                        }
+                      }
+                    )
+                  )
                 ],
               ),
               const SizedBox(height: 10),
@@ -194,19 +214,19 @@ class HomePage extends ConsumerWidget {
                         // Find the next value of position and difference
                         findNextValue(latestPosition, positionList, 'position');
                         findNextValue(latestDifference, differenceList, 'difference');
-                        // try {
-                        //   if (!isFirstSave) {
-                        //     spindataDocument.update({
-                        //       'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
-                        //       'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
-                        //     });
-                        //   } else {
-                        //     isFirstSave = false;
-                        //   }
-                        // } catch (e) {
-                        //   // ignore: avoid_print
-                        //   print('Error: $e');
-                        // }
+                        try {
+                          if (!isFirstSave && isPinCorrect) {
+                            spindataDocument.update({
+                              'position': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': position}]),
+                              'difference': FieldValue.arrayUnion([{'timestamp': DateTime.now().toIso8601String(), 'value': difference}])
+                            });
+                          } else {
+                            isFirstSave = false;
+                          }
+                        } catch (e) {
+                          // ignore: avoid_print
+                          print('Error: $e');
+                        }
                       },
                     ),
               ),
@@ -249,6 +269,9 @@ class HomePage extends ConsumerWidget {
                 nextPositionList.add(nextValue);
               } else if (listType == 'difference' && !nextDifferenceList.contains(nextValue)) {
                 nextDifferenceList.add(nextValue);
+                var nextPosition = (nextValue + position) % 54;
+                if (nextPosition < 0) { nextPosition += 54; }
+                nextPositionFromDifferenceList.add(nextPosition);
               }
             }
         }
