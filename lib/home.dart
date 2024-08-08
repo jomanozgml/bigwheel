@@ -211,6 +211,7 @@ class HomePage extends ConsumerWidget {
                         // Empty the nextPositionList and nextDifferenceList
                         nextPositionList.clear();
                         nextDifferenceList.clear();
+                        nextPositionFromDifferenceList.clear();
                         // Find the next value of position and difference
                         findNextValue(latestPosition, positionList, 'position');
                         findNextValue(latestDifference, differenceList, 'difference');
