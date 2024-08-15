@@ -75,7 +75,7 @@ class HomePage extends ConsumerWidget {
       backgroundColor: Colors.black87,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('BIG WHEEL',
+        title: const Text('BIG WHEEL GAME',
           style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
         toolbarHeight: 22,
         actions: <Widget>[
@@ -285,7 +285,7 @@ class HomePage extends ConsumerWidget {
       return false;
     }
     for(int i = 0; i < list1.length; i++){
-      if((list1[i] - list2[i]).abs() > 3){
+      if((list1[i] - list2[i]).abs() > 2){
         return false;
       }
     }
