@@ -12,10 +12,8 @@ VERSION CONTROL: GitHub with CI/CD Implementation
 ### Web Application URLs
 `Development ENV:` https://spinbigwheel.web.app/
 
-`Production ENV :` https://mangalshova.com.np/
-
 ### Screenshot
-![BIGWHEEL_APP](/assets/images/bigwheel_app.webp)
+![BIGWHEEL_APP](/assets/images/big_wheel.jpg)
 
 ### Setup and Configuration
 1. Clone the GitHub repository: https://github.com/jomanozgml/bigwheel
